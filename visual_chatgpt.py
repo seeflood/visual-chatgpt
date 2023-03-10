@@ -806,7 +806,7 @@ class ConversationBot:
         self.i2t = ImageCaptioning(device="cuda:0")
         self.t2i = T2I(device="cuda:0")
         self.image2canny = image2canny()
-        #self.canny2image = canny2image(device="cuda:0")
+        self.canny2image = canny2image(device="cuda:0")
         # self.image2line = image2line()
         # self.line2image = line2image(device="cuda:1")
         # self.image2hed = image2hed()

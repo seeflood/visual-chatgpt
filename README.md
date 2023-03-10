@@ -4,6 +4,9 @@
 
 See our paper: [<font size=5>Visual ChatGPT: Talking, Drawing and Editing with Visual Foundation Models</font>](https://arxiv.org/abs/2303.04671)
 
+# Visual ChatGPT Colab Support
+You can run the colab notebook with following models  t2i,caption,BLIPVQA,imagetocanny,canny to image
+
 ## Demo 
 <img src="./assets/demo_short.gif" width="750">
 
