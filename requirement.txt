@@ -26,5 +26,5 @@ basicsr==1.4.2
 langchain==0.0.101
 diffusers
 gradio
-openai
+openai==0.27.0
 accelerate
