@@ -1,3 +1,4 @@
+import argparse
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.realpath(__file__)))
@@ -937,6 +938,12 @@ class ConversationBot:
         return state, state, txt + ' ' + image_filename + ' '
 
 if __name__ == '__main__':
+    #Added for colab
+    parser = argparse.ArgumentParser(description="Visual ChatGPT")
+    parser.add_argument(
+        "-s", "--share", help="Shareable link", action="store_true", default=False
+    )
+    args = parser.parse_args()
     bot = ConversationBot()
     with gr.Blocks(css="#chatbot .overflow-y-auto{height:500px}") as demo:
         chatbot = gr.Chatbot(elem_id="chatbot", label="Visual ChatGPT")
@@ -955,4 +962,7 @@ if __name__ == '__main__':
         clear.click(bot.memory.clear)
         clear.click(lambda: [], None, chatbot)
         clear.click(lambda: [], None, state)
-        demo.launch(server_name="0.0.0.0", server_port=7860)
+        if args.share:
+            demo.launch(share=True)
+        else:
+            demo.launch(server_name="0.0.0.0", server_port=7860)
