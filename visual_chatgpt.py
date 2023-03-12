@@ -247,7 +247,7 @@ class canny2image:
         self.pipe.enable_xformers_memory_efficient_attention()
         self.pipe.enable_model_cpu_offload()
         self.device = device
-        self.ddim_sampler = DDIMSampler(self.model)
+        #self.ddim_sampler = DDIMSampler(self.model)
         self.ddim_steps = 20
         self.image_resolution = 512
         self.num_samples = 1
