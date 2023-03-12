@@ -245,7 +245,7 @@ class canny2image:
         self.ddim_steps = 20
         self.image_resolution = 512
         self.num_samples = 1
-        self.save_memory = False
+        self.save_memory = True
         self.strength = 1.0
         self.guess_mode = False
         self.scale = 9.0
