@@ -806,7 +806,7 @@ class ConversationBot:
         self.i2t = ImageCaptioning(device="cuda:0")
         self.t2i = T2I(device="cuda:0")
         self.image2canny = image2canny()
-        #self.canny2image = canny2image(device="cuda:0")
+        self.canny2image = canny2image(device="cuda:0")
         # self.image2line = image2line()
         # self.line2image = line2image(device="cuda:1")
         # self.image2hed = image2hed()
@@ -847,9 +847,9 @@ class ConversationBot:
             Tool(name="Edge Detection On Image", func=self.image2canny.inference,
                  description="useful when you want to detect the edge of the image. like: detect the edges of this image, or canny detection on image, or peform edge detection on this image, or detect the canny image of this image. "
                              "The input to this tool should be a string, representing the image_path"),
-            # Tool(name="Generate Image Condition On Canny Image", func=self.canny2image.inference,
-            #      description="useful when you want to generate a new real image from both the user desciption and a canny image. like: generate a real image of a object or something from this canny image, or generate a new real image of a object or something from this edge image. "
-            #                  "The input to this tool should be a comma seperated string of two, representing the image_path and the user description. "),
+            Tool(name="Generate Image Condition On Canny Image", func=self.canny2image.inference,
+                 description="useful when you want to generate a new real image from both the user desciption and a canny image. like: generate a real image of a object or something from this canny image, or generate a new real image of a object or something from this edge image. "
+                             "The input to this tool should be a comma seperated string of two, representing the image_path and the user description. "),
             # # # Tool(name="Line Detection On Image", func=self.image2line.inference,
             #      description="useful when you want to detect the straight line of the image. like: detect the straight lines of this image, or straight line detection on image, or peform straight line detection on this image, or detect the straight line image of this image. "
             #                  "The input to this tool should be a string, representing the image_path"),
