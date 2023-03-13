@@ -265,9 +265,10 @@ class canny2image:
         image = Image.open(image_path)
         image = np.array(image)
         image = 255 - image
-        img = resize_image(HWC3(image), self.image_resolution)
-        H, W, C = img.shape
-        canny_image = cv2.resize(img, (W, H), interpolation=cv2.INTER_NEAREST)
+        img_sz = resize_image(HWC3(image), self.image_resolution)
+        H, W, C = img_sz.shape
+        image = np.concatenate([img_sz, img_sz, img_sz], axis=2)
+        canny_image = Image.fromarray(image)
         # image = np.array(image)
         # image = 255 - image
         # prompt = instruct_text
