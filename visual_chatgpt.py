@@ -293,10 +293,12 @@ class canny2image:
         #generator = torch.manual_seed(0)
         prompt =instruct_text+ ', ' + self.a_prompt
         print(prompt)
-        image = self.pipe(prompt, num_inference_steps=self.sampling_steps , image=canny_image_resized,negative_prompt=self.n_prompt).images[0]
+        real_image = self.pipe(prompt, num_inference_steps=self.sampling_steps , image=canny_image_resized,negative_prompt=self.n_prompt).images[0]
         updated_image_path = get_new_image_name(image_path, func_name="canny2image")
         #real_image = Image.fromarray(x_samples[0])  # get default the index0 image
-        image.save(updated_image_path)
+        print("Save image",updated_image_path)
+        real_image.save(updated_image_path)
+        print("ok")
         return updated_image_path
 
 class image2line:
