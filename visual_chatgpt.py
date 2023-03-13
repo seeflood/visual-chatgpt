@@ -247,7 +247,7 @@ class canny2image:
         self.pipe.enable_model_cpu_offload()
         self.device = device
         #self.ddim_sampler = DDIMSampler(self.model)
-        self.ddim_steps = 20
+        self.sampling_steps = 20
         self.image_resolution = 512
         self.num_samples = 1
         self.save_memory = True
@@ -262,10 +262,12 @@ class canny2image:
     def inference(self, inputs):
         print("===>Starting canny2image Inference")
         image_path, instruct_text = inputs.split(",")[0], ','.join(inputs.split(',')[1:])
-        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
-        image = image[:, :, None]
-        image = np.concatenate([image, image, image], axis=2)
-        canny_image = Image.fromarray(image)
+        image = Image.open(image_path)
+        image = np.array(image)
+        image = 255 - image
+        img = resize_image(HWC3(image), self.image_resolution)
+        H, W, C = img.shape
+        canny_image = cv2.resize(img, (W, H), interpolation=cv2.INTER_NEAREST)
         # image = np.array(image)
         # image = 255 - image
         # prompt = instruct_text
@@ -290,7 +292,7 @@ class canny2image:
         #generator = torch.manual_seed(0)
         prompt =instruct_text+ ', ' + self.a_prompt
         print(prompt)
-        image = self.pipe(prompt, num_inference_steps=20, image=canny_image,negative_prompt=self.n_prompt).images[0]
+        image = self.pipe(prompt, num_inference_steps=self.sampling_steps , image=canny_image,negative_prompt=self.n_prompt).images[0]
         updated_image_path = get_new_image_name(image_path, func_name="canny2image")
         #real_image = Image.fromarray(x_samples[0])  # get default the index0 image
         image.save(updated_image_path)
