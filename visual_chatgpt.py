@@ -851,6 +851,9 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('--load', type=str, default="ImageCaptioning_cuda:0,ImageEditing_cuda:0,Text2Image_cuda:0,\
                                                     VisualQuestionAnswering_cuda:0,InstructPix2Pix_cuda:0")
+    parser.add_argument(
+        "-s", "--share", help="Shareable link", action="store_true", default=False
+    )
     args = parser.parse_args()
     load_dict = {e.split('_')[0].strip(): e.split('_')[1].strip() for e in args.load.split(',')}
     bot = ConversationBot(load_dict=load_dict)
@@ -872,4 +875,7 @@ if __name__ == '__main__':
         clear.click(bot.memory.clear)
         clear.click(lambda: [], None, chatbot)
         clear.click(lambda: [], None, state)
-        demo.launch(server_name="0.0.0.0", server_port=7861)
+        if args.share:
+            demo.launch(share=True)
+        else:
+            demo.launch(server_name="0.0.0.0", server_port=7860)
