@@ -265,10 +265,10 @@ class canny2image:
         image = Image.open(image_path)
         image = np.array(image)
         image = 255 - image
-        img_sz = resize_image(HWC3(image), self.image_resolution)
-        H, W, C = img_sz.shape
-        image = np.concatenate([img_sz, img_sz, img_sz], axis=2)
+        image = image[:, :, None]
+        image = np.concatenate([image, image, image], axis=2)
         canny_image = Image.fromarray(image)
+        canny_image_resized = canny_image.resize((self.image_resolution,self.image_resolution))
         # image = np.array(image)
         # image = 255 - image
         # prompt = instruct_text
@@ -293,7 +293,7 @@ class canny2image:
         #generator = torch.manual_seed(0)
         prompt =instruct_text+ ', ' + self.a_prompt
         print(prompt)
-        image = self.pipe(prompt, num_inference_steps=self.sampling_steps , image=canny_image,negative_prompt=self.n_prompt).images[0]
+        image = self.pipe(prompt, num_inference_steps=self.sampling_steps , image=canny_image_resized,negative_prompt=self.n_prompt).images[0]
         updated_image_path = get_new_image_name(image_path, func_name="canny2image")
         #real_image = Image.fromarray(x_samples[0])  # get default the index0 image
         image.save(updated_image_path)
