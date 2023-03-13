@@ -241,8 +241,7 @@ class canny2image:
         print("Initialize the canny2image model.")
         controlnet = ControlNetModel.from_pretrained("lllyasviel/sd-controlnet-canny", torch_dtype=torch.float16)
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-    "runwayml/stable-diffusion-v1-5", controlnet=controlnet, torch_dtype=torch.float16
-)
+        "runwayml/stable-diffusion-v1-5", controlnet=controlnet, torch_dtype=torch.float16)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.enable_xformers_memory_efficient_attention()
         self.pipe.enable_model_cpu_offload()
@@ -263,7 +262,7 @@ class canny2image:
     def inference(self, inputs):
         print("===>Starting canny2image Inference")
         image_path, instruct_text = inputs.split(",")[0], ','.join(inputs.split(',')[1:])
-        image = Image.open(image_path)
+        image = cv2.imread(image_path, cv2.IMREAD_COLOR)
         image = image[:, :, None]
         image = np.concatenate([image, image, image], axis=2)
         canny_image = Image.fromarray(image)
@@ -289,10 +288,9 @@ class canny2image:
         # x_samples = self.model.decode_first_stage(samples)
         # x_samples = (einops.rearrange(x_samples, 'b c h w -> b h w c') * 127.5 + 127.5).cpu().numpy().clip(0, 255).astype(np.uint8)
         #generator = torch.manual_seed(0)
-        print(instruct_text)
-        image = self.pipe(
-    instruct_text, num_inference_steps=20, image=canny_image
-).images[0]
+        prompt =instruct_text+ ', ' + self.a_prompt
+        print(prompt)
+        image = self.pipe(prompt, num_inference_steps=20, image=canny_image,negative_prompt=self.n_prompt).images[0]
         updated_image_path = get_new_image_name(image_path, func_name="canny2image")
         #real_image = Image.fromarray(x_samples[0])  # get default the index0 image
         image.save(updated_image_path)
