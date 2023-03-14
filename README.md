@@ -5,11 +5,9 @@
 See our paper: [<font size=5>Visual ChatGPT: Talking, Drawing and Editing with Visual Foundation Models</font>](https://arxiv.org/abs/2303.04671)
 
 ## Visual ChatGPT Colab notebook with xformers and f16 optimizations
-<a src="https://colab.research.google.com/drive/10LNBCMNsl9gneTL5Bht2Ir9Sg9Ni6GOI?usp=sharing">
-    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">
-</a>
+[![Visual ChatGPT xformers ](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/10LNBCMNsl9gneTL5Bht2Ir9Sg9Ni6GOI?usp=sharing)
 
-Tools enabled by default,but you can change tools see the colab for more details.
+Tools enabled by default,but you can change tools see the Colab for more details.
 - Text2Image
 - ImageCaptioning
 - VisualQuestionAnswering
