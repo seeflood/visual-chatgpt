@@ -4,13 +4,24 @@
 
 See our paper: [<font size=5>Visual ChatGPT: Talking, Drawing and Editing with Visual Foundation Models</font>](https://arxiv.org/abs/2303.04671)
 
-<a src="https://img.shields.io/badge/%F0%9F%A4%97-Open%20in%20Spaces-blue" href="https://huggingface.co/spaces/microsoft/visual_chatgpt">
-    <img src="https://img.shields.io/badge/%F0%9F%A4%97-Open%20in%20Spaces-blue" alt="Open in Spaces">
-</a>
-
-<a src="https://colab.research.google.com/assets/colab-badge.svg" href="https://colab.research.google.com/drive/11BtP3h-w0dZjA-X8JsS9_eo8OeGYvxXB">
+## Visual ChatGPT Colab notebook with xformers and f16 optimizations
+<a src="https://colab.research.google.com/drive/10LNBCMNsl9gneTL5Bht2Ir9Sg9Ni6GOI?usp=sharing">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">
 </a>
+
+Tools enabled by default,but you can change tools see the colab for more details.
+- Text2Image
+- ImageCaptioning
+- VisualQuestionAnswering
+- Image2Canny
+- Image2Line
+- Image2Pose
+- Image2Depth
+### Colab notebook changes
+- Added xformers(memory efficient attention) support in stable diffusion workflows
+- Added FP16 support for faster stable diffusion workflows
+- Text to image updated with faster sampling
+- Tools can be switched using --load argument
 
 ## Updates:
 
