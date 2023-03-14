@@ -154,7 +154,7 @@ class ImageEditing:
         print("Initializing ImageEditing to %s" % device)
         self.device = device
         self.mask_former = MaskFormer(device=self.device)
-        self.inpaint = StableDiffusionInpaintPipeline.from_pretrained("runwayml/stable-diffusion-inpainting").to(device)
+        self.inpaint = StableDiffusionInpaintPipeline.from_pretrained("runwayml/stable-diffusion-inpainting", torch_dtype=torch.float16,revision="fp16").to(device)
         self.inpaint.enable_xformers_memory_efficient_attention()
     @prompts(name="Remove Something From The Photo",
              description="useful when you want to remove and object or something from the photo "
@@ -286,7 +286,7 @@ class CannyText2Image:
         print("Initializing CannyText2Image to %s" % device)
         self.controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-canny")
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
+            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None,torch_dtype=torch.float16)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
         self.pipe.enable_xformers_memory_efficient_attention()
@@ -340,7 +340,7 @@ class LineText2Image:
         print("Initializing LineText2Image to %s" % device)
         self.controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-mlsd")
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None
+            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None,torch_dtype=torch.float16
         )
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
@@ -396,7 +396,7 @@ class HedText2Image:
         print("Initializing HedText2Image to %s" % device)
         self.controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-hed")
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None
+            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None,torch_dtype=torch.float16
         )
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
@@ -452,7 +452,7 @@ class ScribbleText2Image:
         print("Initializing ScribbleText2Image to %s" % device)
         self.controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-scribble")
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None
+            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None,torch_dtype=torch.float16
         )
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
@@ -505,7 +505,7 @@ class PoseText2Image:
         print("Initializing PoseText2Image to %s" % device)
         self.controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-openpose")
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
+            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None,torch_dtype=torch.float16)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
         self.pipe.enable_xformers_memory_efficient_attention()
@@ -610,7 +610,7 @@ class SegText2Image:
         print("Initializing SegText2Image to %s" % device)
         self.controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-seg")
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
+            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None,torch_dtype=torch.float16)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
         self.pipe.enable_xformers_memory_efficient_attention()
@@ -667,7 +667,7 @@ class DepthText2Image:
         print("Initializing DepthText2Image to %s" % device)
         self.controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-depth")
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
+            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None,torch_dtype=torch.float16)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
         self.pipe.enable_xformers_memory_efficient_attention()
@@ -736,7 +736,7 @@ class NormalText2Image:
         print("Initializing NormalText2Image to %s" % device)
         self.controlnet = ControlNetModel.from_pretrained("fusing/stable-diffusion-v1-5-controlnet-normal")
         self.pipe = StableDiffusionControlNetPipeline.from_pretrained(
-            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
+            "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None,torch_dtype=torch.float16)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
         self.pipe.enable_xformers_memory_efficient_attention()
