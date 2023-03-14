@@ -15,7 +15,7 @@ from transformers import AutoImageProcessor, UperNetForSemanticSegmentation
 
 from diffusers import StableDiffusionPipeline, StableDiffusionInpaintPipeline, StableDiffusionInstructPix2PixPipeline
 from diffusers import EulerAncestralDiscreteScheduler
-from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, UniPCMultistepScheduler
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, UniPCMultistepScheduler, DPMSolverMultistepScheduler
 from controlnet_aux import OpenposeDetector, MLSDdetector, HEDdetector
 
 from langchain.agents.initialize import initialize_agent
@@ -224,8 +224,10 @@ class Text2Image:
         self.device = device
         self.torch_dtype = torch.float16 if 'cuda' in device else torch.float32
         self.pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5",
-                                                            torch_dtype=self.torch_dtype)
+                                                            torch_dtype=self.torch_dtype,revision="fp16")
+        self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.a_prompt = 'best quality, extremely detailed'
         self.n_prompt = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, ' \
                         'fewer digits, cropped, worst quality, low quality'
@@ -237,7 +239,7 @@ class Text2Image:
     def inference(self, text):
         image_filename = os.path.join('image', str(uuid.uuid4())[0:8] + ".png")
         prompt = text + ', ' + self.a_prompt
-        image = self.pipe(prompt, negative_prompt=self.n_prompt).images[0]
+        image = self.pipe(prompt, negative_prompt=self.n_prompt,num_inference_steps = 20).images[0]
         image.save(image_filename)
         print(
             f"\nProcessed Text2Image, Input Text: {text}, Output Image: {image_filename}")
