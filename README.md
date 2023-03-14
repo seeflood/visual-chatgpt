@@ -4,23 +4,28 @@
 
 See our paper: [<font size=5>Visual ChatGPT: Talking, Drawing and Editing with Visual Foundation Models</font>](https://arxiv.org/abs/2303.04671)
 
-<a src="https://img.shields.io/badge/%F0%9F%A4%97-Open%20in%20Spaces-blue" href="https://huggingface.co/spaces/microsoft/visual_chatgpt">
-    <img src="https://img.shields.io/badge/%F0%9F%A4%97-Open%20in%20Spaces-blue" alt="Open in Spaces">
-</a>
+## Visual ChatGPT Colab notebook with xformers and FP16 optimizations(10 Tools)
+[![Visual ChatGPT xformers ](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/drive/10LNBCMNsl9gneTL5Bht2Ir9Sg9Ni6GOI?usp=sharing)
 
-<a src="https://colab.research.google.com/assets/colab-badge.svg" href="https://colab.research.google.com/drive/11BtP3h-w0dZjA-X8JsS9_eo8OeGYvxXB">
-    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab">
-</a>
+These are the default tools used in the colab notebook,but you can select other tools,see the Colab for more details.
 
-## Updates:
+- Text2Image
+- ImageCaptioning
+- CannyText2Image
+- InstructPix2Pix
+- VisualQuestionAnswering
+- Image2Canny
+- Image2Line
+- Image2Pose
+- Image2Depth
+- Image2Seg
 
-- Add custom GPU/CPU assignment
-- Add windows support
-- Merge HuggingFace ControlNet, Remove download.sh
-- Add Prompt Decorator
-- Add HuggingFace and Colab Demo
-- Clean Requirements
-
+### Colab notebook changes
+- Added xformers(memory efficient attention) support in stable diffusion workflows
+- Added FP16 support for faster stable diffusion workflows
+- Text to image updated with faster sampling
+- Tools can be switched using --load argument
+- 10 tools (11.2GB VRAM)
 
 ## Insight & Goal:
 One the one hand, **ChatGPT (or LLMs)** serves as a **general interface** that provides a broad and diverse understanding of a
