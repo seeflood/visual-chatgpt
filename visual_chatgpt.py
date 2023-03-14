@@ -155,7 +155,7 @@ class ImageEditing:
         self.device = device
         self.mask_former = MaskFormer(device=self.device)
         self.inpaint = StableDiffusionInpaintPipeline.from_pretrained("runwayml/stable-diffusion-inpainting").to(device)
-
+        self.inpaint.enable_xformers_memory_efficient_attention()
     @prompts(name="Remove Something From The Photo",
              description="useful when you want to remove and object or something from the photo "
                          "from its description or location. "
@@ -222,6 +222,7 @@ class Text2Image:
         self.text_refine_gpt2_pipe = pipeline("text-generation", model=self.text_refine_model,
                                               tokenizer=self.text_refine_tokenizer, device=self.device)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
 
     @prompts(name="Generate Image From User Input Text",
              description="useful when you want to generate an image from a user input text and save it to a file. "
@@ -288,6 +289,7 @@ class CannyText2Image:
             "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.seed = -1
         self.a_prompt = 'best quality, extremely detailed'
         self.n_prompt = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, ' \
@@ -342,6 +344,7 @@ class LineText2Image:
         )
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.seed = -1
         self.a_prompt = 'best quality, extremely detailed'
         self.n_prompt = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, ' \
@@ -397,6 +400,7 @@ class HedText2Image:
         )
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.seed = -1
         self.a_prompt = 'best quality, extremely detailed'
         self.n_prompt = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, ' \
@@ -452,6 +456,7 @@ class ScribbleText2Image:
         )
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.seed = -1
         self.a_prompt = 'best quality, extremely detailed'
         self.n_prompt = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit, ' \
@@ -503,6 +508,7 @@ class PoseText2Image:
             "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.num_inference_steps = 20
         self.seed = -1
         self.unconditional_guidance_scale = 9.0
@@ -607,6 +613,7 @@ class SegText2Image:
             "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.seed = -1
         self.a_prompt = 'best quality, extremely detailed'
         self.n_prompt = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit,' \
@@ -663,6 +670,7 @@ class DepthText2Image:
             "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.seed = -1
         self.a_prompt = 'best quality, extremely detailed'
         self.n_prompt = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit,' \
@@ -731,6 +739,7 @@ class NormalText2Image:
             "runwayml/stable-diffusion-v1-5", controlnet=self.controlnet, safety_checker=None)
         self.pipe.scheduler = UniPCMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
+        self.pipe.enable_xformers_memory_efficient_attention()
         self.seed = -1
         self.a_prompt = 'best quality, extremely detailed'
         self.n_prompt = 'longbody, lowres, bad anatomy, bad hands, missing fingers, extra digit,' \
