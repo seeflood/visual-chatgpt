@@ -15,7 +15,7 @@ from transformers import AutoImageProcessor, UperNetForSemanticSegmentation
 
 from diffusers import StableDiffusionPipeline, StableDiffusionInpaintPipeline, StableDiffusionInstructPix2PixPipeline
 from diffusers import EulerAncestralDiscreteScheduler
-from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, UniPCMultistepScheduler
+from diffusers import StableDiffusionControlNetPipeline, ControlNetModel, UniPCMultistepScheduler, DPMSolverMultistepScheduler
 from controlnet_aux import OpenposeDetector, MLSDdetector, HEDdetector
 
 from langchain.agents.initialize import initialize_agent
@@ -216,11 +216,12 @@ class Text2Image:
     def __init__(self, device):
         print("Initializing Text2Image to %s" % device)
         self.device = device
-        self.pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5")
+        self.pipe = StableDiffusionPipeline.from_pretrained("runwayml/stable-diffusion-v1-5",torch_dtype=torch.float16,revision="fp16")
         self.text_refine_tokenizer = AutoTokenizer.from_pretrained("Gustavosta/MagicPrompt-Stable-Diffusion")
         self.text_refine_model = AutoModelForCausalLM.from_pretrained("Gustavosta/MagicPrompt-Stable-Diffusion")
         self.text_refine_gpt2_pipe = pipeline("text-generation", model=self.text_refine_model,
                                               tokenizer=self.text_refine_tokenizer, device=self.device)
+        self.pipe.scheduler = DPMSolverMultistepScheduler.from_config(self.pipe.scheduler.config)
         self.pipe.to(device)
         self.pipe.enable_xformers_memory_efficient_attention()
 
@@ -231,7 +232,7 @@ class Text2Image:
     def inference(self, text):
         image_filename = os.path.join('image', str(uuid.uuid4())[0:8] + ".png")
         refined_text = self.text_refine_gpt2_pipe(text)[0]["generated_text"]
-        image = self.pipe(refined_text).images[0]
+        image = self.pipe(prompt = refined_text,num_inference_steps = 20).images[0]
         image.save(image_filename)
         print(
             f"\nProcessed Text2Image, Input Text: {text}, Refined Text: {refined_text}, Output Image: {image_filename}")

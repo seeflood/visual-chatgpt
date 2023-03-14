@@ -6,7 +6,7 @@ basicsr
 controlnet-aux
 diffusers
 einops
-gradio
+gradio==3.20.1
 imageio
 imageio-ffmpeg
 invisible-watermark
