@@ -816,13 +816,13 @@ class VisualQuestionAnswering:
 
 
 class ConversationBot:
-    def __init__(self, load_dict):
+    def __init__(self, load_dict,llm_model):
         # load_dict = {'VisualQuestionAnswering':'cuda:0', 'ImageCaptioning':'cuda:1',...}
-        print(f"Initializing VisualChatGPT, load_dict={load_dict}")
+        print(f"Initializing VisualChatGPT, load_dict={load_dict} | LLM model {llm_model}")
         if 'ImageCaptioning' not in load_dict:
             raise ValueError("You have to load ImageCaptioning as a basic function for VisualChatGPT")
 
-        self.llm = OpenAI(temperature=0)
+        self.llm = OpenAI(model_name=llm_model,temperature=0)
         self.memory = ConversationBufferMemory(memory_key="chat_history", output_key='output')
 
         self.models = dict()
@@ -889,9 +889,10 @@ if __name__ == '__main__':
     parser.add_argument(
         "-s", "--share", help="Shareable link", action="store_true", default=False
     )
+    parser.add_argument('--llm', type=str, default="text-davinci-003")
     args = parser.parse_args()
     load_dict = {e.split('_')[0].strip(): e.split('_')[1].strip() for e in args.load.split(',')}
-    bot = ConversationBot(load_dict=load_dict)
+    bot = ConversationBot(load_dict=load_dict,llm=args.llm)
     with gr.Blocks(css="#chatbot .overflow-y-auto{height:500px}") as demo:
         chatbot = gr.Chatbot(elem_id="chatbot", label="Visual ChatGPT")
         state = gr.State([])
