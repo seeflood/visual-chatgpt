@@ -892,7 +892,7 @@ if __name__ == '__main__':
     parser.add_argument('--llm', type=str, default="text-davinci-003")
     args = parser.parse_args()
     load_dict = {e.split('_')[0].strip(): e.split('_')[1].strip() for e in args.load.split(',')}
-    bot = ConversationBot(load_dict=load_dict,llm=args.llm)
+    bot = ConversationBot(load_dict=load_dict,llm_model=args.llm)
     with gr.Blocks(css="#chatbot .overflow-y-auto{height:500px}") as demo:
         chatbot = gr.Chatbot(elem_id="chatbot", label="Visual ChatGPT")
         state = gr.State([])
