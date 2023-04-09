@@ -903,16 +903,23 @@ class ConversationBot:
             agent_kwargs={'prefix': VISUAL_CHATGPT_PREFIX, 'format_instructions': VISUAL_CHATGPT_FORMAT_INSTRUCTIONS, 'suffix': VISUAL_CHATGPT_SUFFIX}, )
 
     def run_text(self, text, state):
+        # function to run text input
         print("===============Running run_text =============")
         print("Inputs:", text, state)
         print("======>Previous memory:\n %s" % self.agent.memory)
+        # cut dialogue history to keep only last 500 words
         self.agent.memory.buffer = cut_dialogue_history(self.agent.memory.buffer, keep_last_n_words=500)
+        # generate response using agent
         res = self.agent({"input": text})
         print("======>Current memory:\n %s" % self.agent.memory)
+        # format response to include image if present
         response = re.sub('(image/\S*png)', lambda m: f'![](/file={m.group(0)})*{m.group(0)}*', res['output'])
+        # add input and response to state
         state = state + [(text, response)]
         print("Outputs:", state)
+        # return updated state
         return state, state
+
 
     def run_image(self, image, state, txt):
         print("===============Running run_image =============")
@@ -940,12 +947,17 @@ class ConversationBot:
 
 if __name__ == '__main__':
     #Added for colab
+    # 1. parse command line arguments
     parser = argparse.ArgumentParser(description="Visual ChatGPT")
     parser.add_argument(
         "-s", "--share", help="Shareable link", action="store_true", default=False
     )
     args = parser.parse_args()
+
+    # 2. set up chatbot
     bot = ConversationBot()
+
+    # 3. set up gradio UI
     with gr.Blocks(css="#chatbot .overflow-y-auto{height:500px}") as demo:
         chatbot = gr.Chatbot(elem_id="chatbot", label="Visual ChatGPT")
         state = gr.State([])
@@ -957,12 +969,17 @@ if __name__ == '__main__':
             with gr.Column(scale=0.15, min_width=0):
                 btn = gr.UploadButton("Upload", file_types=["image"])
 
+        # Submit text input to run_text function
         txt.submit(bot.run_text, [txt, state], [chatbot, state])
+        # Clear text input after submission
         txt.submit(lambda: "", None, txt)
+        # Upload image and submit to run_image function
         btn.upload(bot.run_image, [btn, state, txt], [chatbot, state, txt])
+        # Clear memory, chatbot, and state when clear button is clicked
         clear.click(bot.memory.clear)
         clear.click(lambda: [], None, chatbot)
         clear.click(lambda: [], None, state)
+        # Launch demo
         if args.share:
             demo.launch(share=True)
         else:
