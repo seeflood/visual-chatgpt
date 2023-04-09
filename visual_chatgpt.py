@@ -913,7 +913,7 @@ class ConversationBot:
         res = self.agent({"input": text})
         print("======>Current memory:\n %s" % self.agent.memory)
         # format response to include image if present
-        response = re.sub('(image/\S*png)', lambda m: f'![](//file={m.group(0)})*{m.group(0)}*', res['output'])
+        response = re.sub('(image/\S*png)', lambda m: f'![](file={m.group(0)})*{m.group(0)}*', res['output'])
         # add input and response to state
         state = state + [(text, response)]
         print("Outputs:", state)
