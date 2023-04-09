@@ -901,6 +901,10 @@ class ConversationBot:
             memory=self.memory,
             return_intermediate_steps=True,
             agent_kwargs={'prefix': VISUAL_CHATGPT_PREFIX, 'format_instructions': VISUAL_CHATGPT_FORMAT_INSTRUCTIONS, 'suffix': VISUAL_CHATGPT_SUFFIX}, )
+        # print the agent's prompt template
+        print("Agent's prompt template:")
+        print(self.agent.agent.llm_chain.prompt.template)
+        print("=============prompt end===============")
 
     def run_text(self, text, state):
         # function to run text input
