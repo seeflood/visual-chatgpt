@@ -922,10 +922,15 @@ class ConversationBot:
 
 
     def run_image(self, image, state, txt):
+        # function to run image input
         print("===============Running run_image =============")
         print("Inputs:", image, state)
         print("======>Previous memory:\n %s" % self.agent.memory)
+        
+        # generate a unique filename for the image
         image_filename = os.path.join('image', str(uuid.uuid4())[0:8] + ".png")
+        
+        # resize the image to a maximum of 512x512 while preserving aspect ratio
         print("======>Auto Resize Image...")
         img = Image.open(image.name)
         width, height = img.size
@@ -935,15 +940,28 @@ class ConversationBot:
         img = img.convert('RGB')
         img.save(image_filename, "PNG")
         print(f"Resize image form {width}x{height} to {width_new}x{height_new}")
+        
+        # get a description of the image using the image-to-text tool
         description = self.i2t.inference(image_filename)
+        
+        # create prompts for the user and the AI
         Human_prompt = "\nHuman: provide a figure named {}. The description is: {}. This information helps you to understand this image, but you should use tools to finish following tasks, " \
                        "rather than directly imagine from my description. If you understand, say \"Received\". \n".format(image_filename, description)
         AI_prompt = "Received.  "
+        
+        # add the prompts to the agent's memory buffer
         self.agent.memory.buffer = self.agent.memory.buffer + Human_prompt + 'AI: ' + AI_prompt
+        
         print("======>Current memory:\n %s" % self.agent.memory)
+        
+        # add the image and AI prompt to the state
         state = state + [(f"![](/file={image_filename})*{image_filename}*", AI_prompt)]
+        
         print("Outputs:", state)
+        
+        # return the updated state and the filename of the image
         return state, state, txt + ' ' + image_filename + ' '
+
 
 if __name__ == '__main__':
     #Added for colab
