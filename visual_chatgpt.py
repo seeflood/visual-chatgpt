@@ -911,10 +911,12 @@ class ConversationBot:
         print("===============Running run_text =============")
         print("Inputs:", text, state)
         print("======>Previous memory:\n %s" % self.agent.memory)
+
         # cut dialogue history to keep only last 500 words
         self.agent.memory.buffer = cut_dialogue_history(self.agent.memory.buffer, keep_last_n_words=500)
         # generate response using agent
         res = self.agent({"input": text})
+        
         print("======>Current memory:\n %s" % self.agent.memory)
         # format response to include image if present
         response = re.sub('(image/\S*png)', lambda m: f'![](file={m.group(0)})*{m.group(0)}*', res['output'])
